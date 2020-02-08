@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+</head>
+<body>
+
+<div>
+    <div class="content=box">
+        <div>
+            <div class="content-box_title-bar">
+
+            </div>
+
+        </div>
+
+
+
+
+        <div class="content-box_content-section">
+            <div class="DataTable_ContainerFixed-sc-1vbt8ihiLZNQM">
+
+
+                <table id="DataTable"  class="DataTable_Table-sc-rjxc30 gMUozE" border="1" >
+                    <thead class="DataTable_TableHeader-sc-xwyxg fYOYoW" style="transform: translateY(0px); box-shadow: none;">
+                        <tr>
+                            <th>Brand</th>
+                            <th>City</th>
+                            <th>Country</th>
+                            <th>Latitude</th>
+                            <th>Longitude</th>
+                            <th>Ownership Type</th>
+                            <th>Phone Number</th>
+                            <th>Postcode</th>
+                            <th>State/Province</th>
+                            <th>Store Name</th>
+                            <th>Store Number</th>
+                            <th>Street Address</th>
+                            <th>Timezone</th>
+                        </tr>
+                    </thead>
+
+
+                    <tbody class="DataTable_TableBody-sc-1p60x9u hdQoka">
+                        <tr>
+
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
+                <input type="button" onclick="showtable" value="insert row">
+
+
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
+
+<script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+        apiKey: "AIzaSyAGUMqpcbCNGBqTwDkFKSb5gedtcsb99CY",
+        authDomain: "inf551-project-25b8c.firebaseapp.com",
+        databaseURL: "https://inf551-project-25b8c.firebaseio.com",
+        projectId: "inf551-project-25b8c",
+        storageBucket: "inf551-project-25b8c.appspot.com",
+        messagingSenderId: "764344443075",
+        appId: "1:764344443075:web:86ebc82525c5eeff858276",
+        measurementId: "G-7YCQJNHBPX"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    //function showtable() {
+        // https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot
+        var dbRef = firebase.database().ref().limitToFirst(2000);
+        dbRef.once('value')
+            .then(function(snapshot){
+                snapshot.forEach(function(childSnapshot){
+                    var brand = childSnapshot.val()['Brand'];
+                    var city = childSnapshot.val()['City'];
+                    var country = childSnapshot.val()['Country'];
+                    var latitude = childSnapshot.val()['Latitude'];
+                    var longitude = childSnapshot.val()['Longitude'];
+                    var ownership_type = childSnapshot.val()['Ownership Type'];
+                    var phone_number =childSnapshot.val()['Phone Number'];
+                    var postcode =childSnapshot.val()['Postcode'];
+                    var state_province = childSnapshot.val()['State']['Province'];
+                    var store_name = childSnapshot.val()['Store Name'];
+                    var store_number =childSnapshot.val()['Store Number'];
+                    var street_address = childSnapshot.val()['Street Address'];
+                    var timezone = childSnapshot.val()['Timezone'];
+
+
+                    var table = document.getElementById('DataTable');
+                    var row = table.insertRow();
+                    row.insertCell().innerHTML = brand;
+                    row.insertCell().innerHTML = city;
+                    row.insertCell().innerHTML = country;
+                    row.insertCell().innerHTML = latitude;
+                    row.insertCell().innerHTML = longitude;
+                    row.insertCell().innerHTML = ownership_type;
+                    row.insertCell().innerHTML = phone_number;
+                    row.insertCell().innerHTML = postcode;
+                    row.insertCell().innerHTML = state_province;
+                    row.insertCell().innerHTML = store_name;
+                    row.insertCell().innerHTML = store_number;
+                    row.insertCell().innerHTML = street_address;
+                    row.insertCell().innerHTML = timezone;
+
+                });
+            });
+    //}
+
+</script>
+
+</body>
+</html>

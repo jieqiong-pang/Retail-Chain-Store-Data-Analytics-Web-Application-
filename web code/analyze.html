@@ -1,0 +1,460 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+    <title>Find Startbucks</title>
+
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+    <style>
+        
+        table {
+          border-collapse: collapse;
+          border-spacing: 0;
+          width: 100%;
+          border: 5px solid #ddd;
+        }
+
+        th, td {
+          text-align: left;
+          padding: 15px;
+        }
+
+        tr:nth-child(even) {
+          background-color: #f2f6f8;
+        }
+    .btn {
+      border: 2px solid #ddd;
+      padding: 18px 28px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 16px;
+    }
+    
+    .footer {
+       position: fixed;
+       left: 0;
+       bottom: 0;
+       width: 100%;
+       background-color: darkblue;
+       color: white;
+       text-align: center;
+       font-size: 15px;
+    }
+    
+    .dropbtn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 16px;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .dropbtn:hover, .dropbtn:focus {
+      background-color: #3e8e41;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f6f6f6;
+      min-width: 230px;
+      overflow: auto;
+      border: 2px solid #ddf;
+      z-index: 1;
+    }
+
+    .dropdown-content a {
+      color: black;
+      padding: 18px 16px;
+      text-decoration: none;
+      display: block;
+    }
+
+    .dropdown a:hover {background-color: #ddd;}
+
+    .show {display: block;}
+    
+    .navbar {
+      overflow: hidden;
+      background-color: #333;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .navbar a {
+      float: left;
+      font-size: 16px;
+      color: white;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
+
+    .dropdown {
+      float: left;
+      overflow: hidden;
+    }
+
+    .dropdown .dropbtn {
+      font-size: 16px;
+      border: none;
+      outline: none;
+      color: white;
+      padding: 14px 16px;
+      background-color: inherit;
+      font-family: inherit;
+      margin: 0;
+    }
+
+    .navbar a:hover, .dropdown:hover .dropbtn {
+      background-color: red;
+    }
+
+    .dc {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+    }
+
+    .dc a {
+      float: none;
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      text-align: left;
+    }
+
+    .dc a:hover {
+      background-color: #ddd;
+    }
+
+    .dropdown:hover .dc {
+      display: block;
+    }
+    </style>
+
+    <!-- https://www.jb51.net/article/139940.htm-->
+    <!--filtering-->
+    <script type="text/javascript">
+        function onSearch(obj,n){
+            setTimeout(function(){
+                let DataTableId = document.getElementById('DataTable');
+                let rowsLength = DataTableId.rows.length;
+                let key = obj.value;
+                let searchCol = n;
+                for (let i=1; rowsLength > i; i++){
+                    let searchText = DataTableId.rows[i].cells[searchCol].innerHTML;
+                    if(searchText.match(key)){
+                        DataTableId.rows[i].style.display='';
+                    }
+                    else{
+                        DataTableId.rows[i].style.display='none';
+                    }
+                }
+            });
+        }
+    </script>
+
+    <script>
+        let slider = document.getElementById("myRange");
+        let output = document.getElementById("demo");
+        output.innerHTML = slider.value;
+
+        slider.oninput = function() {
+            output.innerHTML = this.value;
+        }
+    </script>
+
+    <!-- https://www.w3schools.com-->
+    <!--sorting-->
+    <script>
+        
+    function sortTable(n) {
+      var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+      table = document.getElementById("DataTable");
+      switching = true;
+      dir = "asc";
+      while (switching) {
+        switching = false;
+        rows = table.rows;
+        for (i = 1; i < (rows.length - 1); i++) {
+          shouldSwitch = false;
+          x = rows[i].getElementsByTagName("TD")[n];
+          y = rows[i + 1].getElementsByTagName("TD")[n];
+            if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+              shouldSwitch= true;
+              break;
+            }
+        }
+        if (shouldSwitch) {
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+          switchcount ++;
+        } else {
+          if (switchcount == 0 && dir == "asc") {
+            dir = "desc";
+            switching = true;
+          }
+        }
+      }
+    }
+    
+    function sortTable2(n) {
+      var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+      table = document.getElementById("DataTable");
+      switching = true;
+      dir = "desc";
+      while (switching) {
+        switching = false;
+        rows = table.rows;
+        for (i = 1; i < (rows.length - 1); i++) {
+          shouldSwitch = false;
+          x = rows[i].getElementsByTagName("TD")[n];
+          y = rows[i + 1].getElementsByTagName("TD")[n];
+            if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+              shouldSwitch= true;
+              break;
+            }
+        }
+        if (shouldSwitch) {
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+          switchcount ++;
+        } else {
+          if (switchcount == 0 && dir == "asc") {
+            dir = "asc";
+            switching = true;
+          }
+        }
+      }
+    }
+   
+   function myFunction() {
+      var x = document.getElementById("myRange").value;
+      document.getElementById("demo").innerHTML = x;
+    }
+    function myFunction2() {
+      document.getElementById("myDropdown2").classList.toggle("show");
+    }
+    function myFunction3() {
+       document.getElementById("myDropdown3").classList.toggle("show");
+    }
+    function myFunction4() {
+       document.getElementById("myDropdown4").classList.toggle("show");
+    }
+    function myFunction5() {
+        document.getElementById("myDropdown5").classList.toggle("show");
+       }
+    function myFunction6() {
+      document.getElementById("myDropdown6").classList.toggle("show");
+    }
+    function myFunction7() {
+       document.getElementById("myDropdown7").classList.toggle("show");
+    }
+    function myFunction8() {
+       document.getElementById("myDropdown8").classList.toggle("show");
+    }
+    function myFunction9() {
+        document.getElementById("myDropdown9").classList.toggle("show");
+       }
+    function myFunction10() {
+      document.getElementById("myDropdown10").classList.toggle("show");
+    }
+    function myFunction11() {
+       document.getElementById("myDropdown11").classList.toggle("show");
+    }
+    function myFunction12() {
+       document.getElementById("myDropdown12").classList.toggle("show");
+    }
+    function myFunction13() {
+        document.getElementById("myDropdown13").classList.toggle("show");
+       }
+    function myFunction14() {
+           document.getElementById("myDropdown14").classList.toggle("show");
+          }
+    </script>
+
+</head>
+
+
+
+<body>
+
+    <div class="navbar">
+      <a href="home.html">Home</a>
+      <a href="aboutData.html">Data Info</a>
+      <a href="table.html">Find Startbucks</a>
+      <div class="dropdown">
+        <button class="dropbtn">Analyze
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dc">
+          <a href="analyze.html">Analyze Country</a>
+          <a href="analyze2.html">Analyze Latitude</a>
+          <a href="test.html">Original Data</a>
+          <a href="https://www.kaggle.com/starbucks/store-locations">Kaggle link</a>
+        </div>
+      </div>
+    </div>
+<div>
+    <h2 >Starbucks Locations Worldwide</h2>
+    <h3>All Starbucks in this Dataset. It is clear to see the number of Starbucks in each different countries.</h3>
+    
+        <head>
+          <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+          <script type="text/javascript">
+            google.charts.load('current', {
+              'packages':['geochart'],
+              'mapsApiKey': 'AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY'
+            });
+            google.charts.setOnLoadCallback(drawRegionsMap);
+
+            function drawRegionsMap() {
+              var data = google.visualization.arrayToDataTable([
+                ['Country', 'Starbucks'],
+                ['US', 13680],
+                ['BZ', 102],
+                ['CN', 2734],
+                ['CA', 1468],
+                ['FR', 600],
+                ['JP', 1237],
+                ['RU', 109],
+                ['PE', 89],
+                ['AR', 108],
+                ['MX', 579],
+                ['PA', 5],
+                ['CO', 11],
+                ['BO', 4],
+                ['BR', 102],
+                ['ZA', 3],
+                ['NZ', 24],
+                ['AU', 22],
+                ['IN', 88],
+                ['KZ', 8],
+                ['VN', 25],
+                ['TH', 289],
+                ['PH', 289],
+                ['EG', 31],
+                ['TR', 326],
+                ['NO', 17],
+                ['DK', 21],
+                ['KH', 4],
+                ['MY', 234],
+                ['TW', 394],
+                ['SA', 102],
+                ['ES', 101],
+                ['MA', 9],
+                ['PL', 53],
+                ['SE', 18],
+                ['OM', 12],
+                ['EG', 31],
+                ['GB', 901],
+                ['FI', 8],
+                ['LU', 2],
+                ['BS', 10],
+                ['CR', 11],
+                ['CL', 96],
+                ['RO', 27],
+                ['KR', 993],
+                ['ID', 268],
+                ['PT', 11],
+                ['IE', 73],
+                ['NL', 59],
+                ['MX', 579],
+                ['DE', 160],
+                ['GR', 28],
+                ['DK', 21],
+                                                                
+              ]);
+
+              var options = {};
+
+              var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+
+              chart.draw(data, options);
+            }
+          </script>
+
+        </head>
+        <body>
+          <div id="regions_div" style="width: 1000px; height: 700px;"></div>
+        </body>
+        <div class="footer">
+          <p>Copy right@INF551 Final</p>
+        </div>
+     
+
+    </div>
+</div>
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
+
+
+
+<script>
+    // Your web app's Firebase configuration
+    let firebaseConfig = {
+        apiKey: "AIzaSyAGUMqpcbCNGBqTwDkFKSb5gedtcsb99CY",
+        authDomain: "inf551-project-25b8c.firebaseapp.com",
+        databaseURL: "https://inf551-project-25b8c.firebaseio.com",
+        projectId: "inf551-project-25b8c",
+        storageBucket: "inf551-project-25b8c.appspot.com",
+        messagingSenderId: "764344443075",
+        appId: "1:764344443075:web:86ebc82525c5eeff858276",
+        measurementId: "G-7YCQJNHBPX"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    //function showtable() {
+    // https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot
+    let dbRef = firebase.database().ref().limitToFirst(30);
+    dbRef.once('value')
+        .then(function(snapshot){
+            snapshot.forEach(function(childSnapshot){
+                let brand = childSnapshot.val()['Brand'];
+                let city = childSnapshot.val()['City'];
+                let country = childSnapshot.val()['Country'];
+                let latitude = childSnapshot.val()['Latitude'];
+                let longitude = childSnapshot.val()['Longitude'];
+                let ownership_type = childSnapshot.val()['Ownership Type'];
+                let phone_number =childSnapshot.val()['Phone Number'];
+                let postcode =childSnapshot.val()['Postcode'];
+                let state_province = childSnapshot.val()['State']['Province'];
+                let store_name = childSnapshot.val()['Store Name'];
+                let store_number =childSnapshot.val()['Store Number'];
+                let street_address = childSnapshot.val()['Street Address'];
+                let timezone = childSnapshot.val()['Timezone'];
+
+
+                let table = document.getElementById('DataTable');
+                let row = table.insertRow();
+                row.insertCell().innerHTML = brand;
+                row.insertCell().innerHTML = city;
+                row.insertCell().innerHTML = country;
+                row.insertCell().innerHTML = latitude;
+                row.insertCell().innerHTML = longitude;
+                row.insertCell().innerHTML = ownership_type;
+                row.insertCell().innerHTML = phone_number;
+                row.insertCell().innerHTML = postcode;
+                row.insertCell().innerHTML = state_province;
+                row.insertCell().innerHTML = store_name;
+                row.insertCell().innerHTML = store_number;
+                row.insertCell().innerHTML = street_address;
+                row.insertCell().innerHTML = timezone;
+
+            });
+        });
+    //}
+
+</script>
+
+</body>
+</html>

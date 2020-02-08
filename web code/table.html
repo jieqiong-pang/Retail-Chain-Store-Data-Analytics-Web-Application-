@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+    <title>Table</title>
+
+    <!--    rangeSlider-->
+    <link rel="stylesheet" href="./jquery.range.css">
+    <link rel="stylesheet" href="./jquery-ui.css">
+    <script src="./jquery-1.10.2.js"></script>
+    <script src="./jquery-ui.js"></script>
+    <script src="./jquery.range.js"></script>
+
+
+    <!--    button-->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!-- https://www.jb51.net/article/139940.htm-->
+    <!--filtering-->
+    <script type="text/javascript">
+        function onSearch(obj, n) {
+            setTimeout(function () {
+                let DataTableId = document.getElementById('DataTable');
+                let rowsLength = DataTableId.rows.length;
+                let key = obj.value;
+                let searchCol = n;
+                for (let i = 1; rowsLength > i; i++) {
+                    let searchText = DataTableId.rows[i].cells[searchCol].innerHTML;
+                    if (searchText.match(key)) {
+                        DataTableId.rows[i].style.display = '';
+                    } else {
+                        DataTableId.rows[i].style.display = 'none';
+                    }
+                }
+            });
+        }
+    </script>
+
+    <!--    http://www.youhutong.com/index.php/article/index/89.html-->
+    <!--    http://jsfiddle.net/u9gpsb8h/-->
+    <!--    rangeSlider-->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#slider-range-latitude").slider({
+                range: true,
+                min: -46.4,
+                max: 64.8,
+                values: [-46.4, 64.8],
+                slide: function (event, ui) {
+                    // in this function we can define what happens when a user changes the sliders
+                    $("#amount").val(ui.values[0] + " - " + ui.values[1]);
+
+                    let table = document.getElementById("DataTable");
+                    for (let i = 1, row; row = table.rows[i]; i++) {
+                        let latitude = $('tr:eq(' + i + ') > td:eq(3)').text();
+                        if (latitude >= ui.values[0] && latitude <= ui.values[1]) {
+                            $(row).show();
+                        } else {
+                            $(row).hide();
+                        }
+                    }
+                    $("#amount-latitude").val($("#slider-range-latitude").slider("values", 0) +
+                        " - " + $("#slider-range-latitude").slider("values", 1));
+                }
+            });
+            $("#amount-latitude").val($("#slider-range-latitude").slider("values", 0) +
+                " - " + $("#slider-range-latitude").slider("values", 1));
+
+            $("#slider-range-longitude").slider({
+                range: true,
+                min: -159,
+                max: 177,
+                values: [-159, 177],
+                slide: function (event, ui) {
+                    // in this function we can define what happens when a user changes the sliders
+                    $("#amount").val(ui.values[0] + " - " + ui.values[1]);
+
+                    let table = document.getElementById("DataTable");
+                    for (let i = 1, row; row = table.rows[i]; i++) {
+                        let latitude = $('tr:eq(' + i + ') > td:eq(4)').text();
+                        // console.log(latitude)
+                        if (latitude >= ui.values[0] && latitude <= ui.values[1]) {
+                            $(row).show();
+                        } else {
+                            $(row).hide();
+                        }
+                    }
+                    $("#amount-longitude").val($("#slider-range-longitude").slider("values", 0) +
+                        " - " + $("#slider-range-longitude").slider("values", 1));
+                }
+            });
+            $("#amount-longitude").val($("#slider-range-longitude").slider("values", 0) +
+                " - " + $("#slider-range-longitude").slider("values", 1));
+        });
+    </script>
+
+    <!--sorting-->
+    <script>
+        function sortAscending(n) {
+            let table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.getElementById("DataTable");
+            switching = true;
+            dir = "asc";
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[n];
+                    y = rows[i + 1].getElementsByTagName("TD")[n];
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    switchcount++;
+                } else {
+                    if (switchcount == 0 && dir == "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+        }
+
+
+        function sortDescending(n) {
+            let table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.getElementById("DataTable");
+            switching = true;
+            dir = "desc";
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[n];
+                    y = rows[i + 1].getElementsByTagName("TD")[n];
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    switchcount++;
+                } else {
+                    if (switchcount == 0 && dir == "asc") {
+                        dir = "asc";
+                        switching = true;
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .navbar {
+          overflow: hidden;
+          background-color: #333;
+          font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .navbar a {
+          float: left;
+          font-size: 16px;
+          color: white;
+          text-align: center;
+          padding: 14px 16px;
+          text-decoration: none;
+        }
+
+        .dd {
+          float: left;
+          overflow: hidden;
+        }
+
+        .dd .nn {
+          font-size: 16px;
+          border: none;
+          outline: none;
+          color: white;
+          padding: 14px 16px;
+          background-color: inherit;
+          font-family: inherit;
+          margin: 0;
+        }
+
+        .navbar a:hover, .dd:hover .nn {
+          background-color: red;
+        }
+
+        .dc {
+          display: none;
+          position: absolute;
+          background-color: #f9f9f9;
+          min-width: 160px;
+          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+          z-index: 1;
+        }
+
+        .dc a {
+          float: none;
+          color: black;
+          padding: 12px 16px;
+          text-decoration: none;
+          display: block;
+          text-align: left;
+        }
+
+        .dc a:hover {
+          background-color: #ddd;
+        }
+
+        .dd:hover .dc {
+          display: block;
+        }
+    
+    .footer {
+          position: fixed;
+          left: 0;
+          bottom: 0;
+          width: 100%;
+          background-color: darkblue;
+          color: white;
+          text-align: center;
+          font-size: 15px;
+    }
+    
+
+    table {
+      border-collapse: collapse;
+      border-spacing: 0;
+      width: 100%;
+      border: 5px solid #ddd;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 15px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f6f8;
+    }
+    </style>
+
+    <style type="text/css">
+        th {
+            min-width: 180px;
+        }
+    </style>
+</head>
+
+
+<body>
+    
+    <div class="navbar">
+      <a href="home.html">Home</a>
+      <a href="aboutData.html">Data Info</a>
+      <a href="table.html">Find Startbucks</a>
+      <div class="dd">
+        <button class="nn">Analyze
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dc">
+          <a href="analyze.html">Analyze Country</a>
+          <a href="analyze2.html">Analyze Latitude</a>
+          <a href="test.html">Original Data</a>
+          <a href="https://www.kaggle.com/starbucks/store-locations">Kaggle link</a>
+        </div>
+      </div>
+    </div>
+
+<div>
+    <h2 >Starbucks Locations Worldwide</h2>
+    <h3>Name, ownership type, and location of every Starbucks store in operation</h3>
+    <div class="content=box">
+        <div>
+            <div class="content-box_title-bar">
+            </div>
+        </div>
+
+        <div class="content-box_content-section">
+            <div style="overflow-x: auto; overflow-y: auto;height:750px; ">
+                <table id="DataTable" class="table table-striped" border="1">
+                    <thead style="transform: translateY(0px); box-shadow: none;">
+                    <tr>
+                        <div class="dropdown">
+
+                            <th id="brand">Brand
+                                <div class="btn-group">
+                                    <a href="#" data-toggle="dropdown">
+                                        <span class="glyphicon glyphicon-filter"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <div>Sort</div>
+                                        <div>
+                                            <a href="#" onclick="sortAscending(0)">
+                                                <span class="glyphicon glyphicon-sort-by-alphabet"></span>Sort ascending
+                                            </a>
+                                            <br>
+                                            <a href="#" onclick="sortDescending(0)">
+                                                <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>Sort
+                                                descending
+                                            </a>
+                                        </div>
+                                        <li class="divider"></li>
+                                        <div>Filter</div>
+                                        <div>
+                                            <input name="key" type="text" onkeydown="onSearch(this,0)" value=""/>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </th>
+
+                            <th id="city" class="sortable">City
+                                <div class="btn-group">
+                                    <a href="#" data-toggle="dropdown">
+                                        <span class="glyphicon glyphicon-filter"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <div>Sort</div>
+                                        <div>
+                                            <a href="#" onclick="sortAscending(1)">
+                                                <span class="glyphicon glyphicon-sort-by-alphabet"></span>Sort ascending
+                                            </a>
+                                            <br>
+                                            <a href="#" onclick="sortDescending(1)">
+                                                <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>Sort
+                                                descending
+                                            </a>
+                                        </div>
+                                        <li class="divider"></li>
+                                        <div>Filter</div>
+                                        <div>
+                                            <input name="key" type="text" onkeydown="onSearch(this,1)" value=""/>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </th>
+
+                            <th id="country" class="sortable">Country
+                                <div class="btn-group">
+                                    <a href="#" data-toggle="dropdown">
+                                        <span class="glyphicon glyphicon-filter"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <div>Sort</div>
+                                        <div>
+                                            <a href="#" onclick="sortAscending(2)">
+                                                <span class="glyphicon glyphicon-sort-by-alphabet"></span>Sort ascending
+                                            </a>
+                                            <br>
+                                            <a href="#" onclick="sortDescending(2)">
+                                                <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>Sort
+                                                descending
+                                            </a>
+                                        </div>
+                                        <li class="divider"></li>
+                                        <div>Filter</div>
+                                        <div>
+                                            <input name="key" type="text" onkeydown="onSearch(this,2)" value=""/>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </th>
+
+                            <th id="latitude">Latitude
+                                <div class="btn-group">
+                                    <a href="#" data-toggle="dropdown">
+                                        <span class="glyphicon glyphicon-filter"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <div>Sort</div>
+                                        <div>
+                                            <a href="#" onclick="sortAscending(3)">
+                                                <span class="glyphicon glyphicon-sort-by-order"></span>Sort ascending
+                                            </a>
+                                            <br>
+                                            <a href="#" onclick="sortDescending(3)">
+                                                <span class="glyphicon glyphicon-sort-by-order-alt"></span>Sort
+                                                descending
+                                            </a>
+                                        </div>
+                                        <li class="divider"></li>
+                                        <p>
+                                            <label for="amount-latitude">Filter range:
+                                                <input type="text" id="amount-latitude"
+                                                       style="border: 0; color: #f6931f; font-weight: bold;"/>
+                                            </label>
+                                        </p>
+                                        <div id="slider-range-latitude"></div>
+
+                                    </ul>
+                                    </ul>
+                                </div>
+                            </th>
+
+                            <th id="longitude">Longitude
+                                <div class="btn-group">
+                                    <a href="#" data-toggle="dropdown">
+                                        <span class="glyphicon glyphicon-filter"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <div>Sort</div>
+                                        <div>
+                                            <a href="#" onclick="sortAscending(4)">
+                                                <span class="glyphicon glyphicon-sort-by-order"></span>Sort ascending
+                                            </a>
+                                            <br>
+                                            <a href="#" onclick="sortDescending(4)">
+                                                <span class="glyphicon glyphicon-sort-by-order-alt"></span>Sort
+                                                descending
+                                            </a>
+                                        </div>
+                                        <li class="divider"></li>
+                                        <p>
+                                            <label for="amount-longitude">Filter range:
+                                                <input type="text" id="amount-longitude"
+                                                       style="border: 0; color: #f6931f; font-weight: bold;"/>
+                                            </label>
+                                        </p>
+                                        <div id="slider-range-longitude"></div>
+
+                                    </ul>
+                                </div>
+                            </th>
+
+                            <th id="ownership type">Ownership Type
+                                <div class="btn-group">
+                                    <a href="#" data-toggle="dropdown">
+                                        <span class="glyphicon glyphicon-filter"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <div>Sort</div>
+                                        <div>
+                                            <a href="#" onclick="sortAscending(5)">
+                                                <span class="glyphicon glyphicon-sort-by-alphabet"></span>Sort ascending
+                                            </a>
+                                            <br>
+                                            <a href="#" onclick="sortDescending(5)">
+                                                <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>Sort
+                                                descending
+                                            </a>
+                                        </div>
+                                        <li class="divider"></li>
+                                        <div>Filter</div>
+                                        <div>
+                                            <input name="key" type="text" onkeydown="onSearch(this,5)" value=""/>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </th>
+
+                            <th id="phone number">Phone Number
+                                <div class="btn-group">
+                                    <a href="#" data-toggle="dropdown">
+                                        <span class="glyphicon glyphicon-filter"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <div>Sort</div>
+                                        <div>
+                                            <a href="#" onclick="sortAscending(6)">
+                                                <span class="glyphicon glyphicon-sort-by-alphabet"></span>Sort ascending
+                                            </a>
+                                            <br>
+                                            <a href="#" onclick="sortDescending(6)">
+                                                <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>Sort
+                                                descending
+                                            </a>
+                                        </div>
+                                        <li class="divider"></li>
+                                        <div>Filter</div>
+                                        <div>
+                                            <input name="key" type="text" onkeydown="onSearch(this,6)" value=""/>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </th>
+
+                            <th id="postcode">Postcode
+                                <div class="btn-group">
+                                    <a href="#" data-toggle="dropdown">
+                                        <span class="glyphicon glyphicon-filter"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <div>Sort</div>
+                                        <div>
+                                            <a href="#" onclick="sortAscending(7)">
+                                                <span class="glyphicon glyphicon-sort-by-alphabet"></span>Sort ascending
+                                            </a>
+                                            <br>
+                                            <a href="#" onclick="sortDescending(7)">
+                                                <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>Sort
+                                                descending
+                                            </a>
+                                        </div>
+                                        <li class="divider"></li>
+                                        <div>Filter</div>
+                                        <div>
+                                            <input name="key" type="text" onkeydown="onSearch(this,7)" value=""/>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </th>
+
+                            <th id="state/province">State/Province
+                                <div class="btn-group">
+                                    <a href="#" data-toggle="dropdown">
+                                        <span class="glyphicon glyphicon-filter"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <div>Sort</div>
+                                        <div>
+                                            <a href="#" onclick="sortAscending(8)">
+                                                <span class="glyphicon glyphicon-sort-by-alphabet"></span>Sort ascending
+                                            </a>
+                                            <br>
+                                            <a href="#" onclick="sortDescending(8)">
+                                                <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>Sort
+                                                descending
+                                            </a>
+                                        </div>
+                                        <li class="divider"></li>
+                                        <div>Filter</div>
+                                        <div>
+                                            <input name="key" type="text" onkeydown="onSearch(this,8)" value=""/>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </th>
+
+                            <th id="store name">Store Name
+                                <div class="btn-group">
+                                    <a href="#" data-toggle="dropdown">
+                                        <span class="glyphicon glyphicon-filter"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <div>Sort</div>
+                                        <div>
+                                            <a href="#" onclick="sortAscending(9)">
+                                                <span class="glyphicon glyphicon-sort-by-alphabet"></span>Sort ascending
+                                            </a>
+                                            <br>
+                                            <a href="#" onclick="sortDescending(9)">
+                                                <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>Sort
+                                                descending
+                                            </a>
+                                        </div>
+                                        <li class="divider"></li>
+                                        <div>Filter</div>
+                                        <div>
+                                            <input name="key" type="text" onkeydown="onSearch(this,9)" value=""/>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </th>
+
+                            <th id="store number">Store Number
+                                <div class="btn-group">
+                                    <a href="#" data-toggle="dropdown">
+                                        <span class="glyphicon glyphicon-filter"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <div>Sort</div>
+                                        <div>
+                                            <a href="#" onclick="sortAscending(10)">
+                                                <span class="glyphicon glyphicon-sort-by-alphabet"></span>Sort ascending
+                                            </a>
+                                            <br>
+                                            <a href="#" onclick="sortDescending(10)">
+                                                <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>Sort
+                                                descending
+                                            </a>
+                                        </div>
+                                        <li class="divider"></li>
+                                        <div>Filter</div>
+                                        <div>
+                                            <input name="key" type="text" onkeydown="onSearch(this,10)" value=""/>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </th>
+
+                            <th id="street address">Street Address
+                                <div class="btn-group">
+                                    <a href="#" data-toggle="dropdown">
+                                        <span class="glyphicon glyphicon-filter"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <div>Sort</div>
+                                        <div>
+                                            <a href="#" onclick="sortAscending(11)">
+                                                <span class="glyphicon glyphicon-sort-by-alphabet"></span>Sort ascending
+                                            </a>
+                                            <br>
+                                            <a href="#" onclick="sortDescending(11)">
+                                                <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>Sort
+                                                descending
+                                            </a>
+                                        </div>
+                                        <li class="divider"></li>
+                                        <div>Filter</div>
+                                        <div>
+                                            <input name="key" type="text" onkeydown="onSearch(this,11)" value=""/>
+                                        </div>
+                                    </ul>
+                                </div>
+
+                            </th>
+                            <th id="timezone">Timezone
+                                <div class="btn-group">
+                                    <a href="#" data-toggle="dropdown">
+                                        <span class="glyphicon glyphicon-filter"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <div>Sort</div>
+                                        <div>
+                                            <a href="#" onclick="sortAscending(12)">
+                                                <span class="glyphicon glyphicon-sort-by-alphabet"></span>Sort ascending
+                                            </a>
+                                            <br>
+                                            <a href="#" onclick="sortDescending(12)">
+                                                <span class="glyphicon glyphicon-sort-by-alphabet-alt"></span>Sort
+                                                descending
+                                            </a>
+                                        </div>
+                                        <li class="divider"></li>
+                                        <div>Filter</div>
+                                        <div>
+                                            <input name="key" type="text" onkeydown="onSearch(this,12)" value=""/>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </th>
+                        </div>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <body>
+          <div id="regions_div" style="width: 900px; height: 500px;"></div>
+        </body>
+        <div class="footer">
+          <p>Copy right@INF551 Final</p>
+        </div>
+
+    </div>
+</div>
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
+
+
+<script>
+    // Your web app's Firebase configuration
+    let firebaseConfig = {
+        apiKey: "AIzaSyAGUMqpcbCNGBqTwDkFKSb5gedtcsb99CY",
+        authDomain: "inf551-project-25b8c.firebaseapp.com",
+        databaseURL: "https://inf551-project-25b8c.firebaseio.com",
+        projectId: "inf551-project-25b8c",
+        storageBucket: "inf551-project-25b8c.appspot.com",
+        messagingSenderId: "764344443075",
+        appId: "1:764344443075:web:86ebc82525c5eeff858276",
+        measurementId: "G-7YCQJNHBPX"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+
+    // https://firebase.google.com/docs/reference/js/firebase.database.DataSnapshot
+    let dbRef = firebase.database().ref().limitToFirst(300);
+    dbRef.once('value')
+        .then(function (snapshot) {
+            snapshot.forEach(function (childSnapshot) {
+                let brand = childSnapshot.val()['Brand'];
+                let city = childSnapshot.val()['City'];
+                let country = childSnapshot.val()['Country'];
+                let latitude = childSnapshot.val()['Latitude'];
+                let longitude = childSnapshot.val()['Longitude'];
+                let ownership_type = childSnapshot.val()['Ownership Type'];
+                let phone_number = childSnapshot.val()['Phone Number'];
+                let postcode = childSnapshot.val()['Postcode'];
+                let state_province = childSnapshot.val()['State']['Province'];
+                let store_name = childSnapshot.val()['Store Name'];
+                let store_number = childSnapshot.val()['Store Number'];
+                let street_address = childSnapshot.val()['Street Address'];
+                let timezone = childSnapshot.val()['Timezone'];
+
+
+                let table = document.getElementById('DataTable');
+                let row = table.insertRow();
+                row.insertCell().innerHTML = brand;
+                row.insertCell().innerHTML = city;
+                row.insertCell().innerHTML = country;
+                row.insertCell().innerHTML = latitude;
+                row.insertCell().innerHTML = longitude;
+                row.insertCell().innerHTML = ownership_type;
+                row.insertCell().innerHTML = phone_number;
+                row.insertCell().innerHTML = postcode;
+                row.insertCell().innerHTML = state_province;
+                row.insertCell().innerHTML = store_name;
+                row.insertCell().innerHTML = store_number;
+                row.insertCell().innerHTML = street_address;
+                row.insertCell().innerHTML = timezone;
+
+            });
+        });
+
+</script>
+
+</body>
+</html>

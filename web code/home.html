@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+  background-color: lightgray;
+  color: black;
+  font-size: 30px;
+
+}
+
+.navbar {
+  overflow: hidden;
+  background-color: #333;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.navbar a {
+  float: left;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.dropdown {
+  float: left;
+  overflow: hidden;
+}
+
+.dropdown .dropbtn {
+  font-size: 16px;
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.navbar a:hover, .dropdown:hover .dropbtn {
+  background-color: red;
+}
+
+.dc {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dc a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dc a:hover {
+  background-color: #ddd;
+}
+
+.dropdown:hover .dc {
+  display: block;
+}
+.container {
+  position: relative;
+  text-align: center;
+  color: white;
+}
+.top-left {
+  position: absolute;
+  font-size: 39px;
+  top: 90px;
+  left: 90px;
+}
+.centered {
+position: absolute;
+font-size: 39px;
+top: 50%;
+left: 45%;
+transform: translate(-50%, -50%);
+</style>
+
+</head>
+<body>
+    <div class="navbar">
+      <a href="home.html">Home</a>
+      <a href="aboutData.html">Data Info</a>
+      <a href="table.html">Find Startbucks</a>
+
+      <div class="dropdown">
+        <button class="dropbtn">Analyze
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dc">
+          <a href="analyze.html">Analyze Country</a>
+          <a href="analyze2.html">Analyze Latitude</a>
+          <a href="test.html">Original Data</a>
+          <a href="https://www.kaggle.com/starbucks/store-locations">Kaggle link</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container">
+      <img src="1.jpg" alt="Snow" style="width:100%;">
+      <div class="top-left">Starbucks Locations Worldwide</div>
+      <div class="centered">Name, ownership type, and location of every Starbucks store in operation</div>
+    </div>
+</body>
+</html>
